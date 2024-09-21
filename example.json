@@ -8,5 +8,5 @@ layout: none
 	"employees": "{{post.employees}}",
 	"tags": "{{ post.tags | array_to_sentence_string }}",
 	"categories": "{{post.categories}}",
-	"details": "/data/example/{{post.id}}/"
+	"details": "{{post.id}}/"
 }{% if forloop.rindex0 > 0 %},{% endif %}{% endfor %}]
