@@ -54,8 +54,8 @@ jobs:
 
       # Reconfigure the output files
       - name: Set Data filenames
-        run: ./.github/scripts/Set-DataFilenames.ps1
-        shell: pwsh
+        run: sudo pwsh ./.github/scripts/Set-DataFilenames.ps1
+        shell: sh
 
       # Upload the built artifact
       - name: Upload artifact
