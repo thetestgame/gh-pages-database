@@ -1,0 +1,12 @@
+---
+layout: none
+---
+[{% for post in site.example %}{
+	"company-name": "{{post.company-name}}",
+	"city": "{{post.city}}",
+	"state": "{{post.state}}",
+	"employees": "{{post.employees}}",
+	"tags": "{{ post.tags | array_to_sentence_string }}",
+	"categories": "{{post.categories}}",
+	"details": "/data/example/{{post.id}}/"
+}{% if forloop.rindex0 > 0 %},{% endif %}{% endfor %}]

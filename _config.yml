@@ -1,0 +1,6 @@
+
+# Collections
+collections:
+  example:
+    output: true
+    permalink: /data/example/:slug/

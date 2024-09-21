@@ -1,6 +1,8 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+# This workflow automatically builds the Github Pages website and deploys it to the github-pages branch
+# for distribution. During this process it also performs secondary publishing steps required such
+# as clearing the Cloudflare cache to reflect changes immediately.
 
+name: Build/Deploy Website
 on:
   # Runs on pushes targeting the default branch
   push:
@@ -26,15 +28,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Check out the source
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+
+      # Setup Ruby for building Jekyll
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3' # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          cache-version: 0 # Increment this number if you need to re-download cached gems
+          
+      # Setup Github Pages 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        id: pages
+        uses: actions/configure-pages@v3
+
+      # Build the Jekyll project
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./
           destination: ./_site
+
+      # Reconfigure the output files
+      - name: Set Data filenames
+        run: ./.github/scripts/Set-DataFilenames.ps1
+        shell: pwsh
+
+      # Upload the built artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
@@ -45,7 +68,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+
+    # Steps required to deploy
     steps:
+      # Deploy to Github
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v2
+
+      # Clear Cloudflare Cache
+      #- name: Purge cache
+      #  uses: jakejarvis/cloudflare-purge-action@master
+      #  env:
+      #    CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
+      #    CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}

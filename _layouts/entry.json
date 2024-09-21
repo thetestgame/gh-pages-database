@@ -1,0 +1,12 @@
+---
+layout: none
+---
+
+{
+    "company-name": "{{page.company-name}}",
+    "city": "{{page.city}}",
+    "state": "{{page.state}}",
+    "employees": "{{page.employees}}",
+    "tags": "{{ page.tags | array_to_sentence_string }}",
+    "categories": "{{page.categories}}"
+}
